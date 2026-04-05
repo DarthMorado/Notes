@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DarthNotes", "DarthNotes\DarthNotes.csproj", "{B85BDE2C-03CA-4844-B5A6-46881D438E46}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DarthNotes.Web", "DarthNotes.Web\DarthNotes.Web.csproj", "{ECA2465E-1FEC-4405-9733-4F5569003431}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{B85BDE2C-03CA-4844-B5A6-46881D438E46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B85BDE2C-03CA-4844-B5A6-46881D438E46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B85BDE2C-03CA-4844-B5A6-46881D438E46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECA2465E-1FEC-4405-9733-4F5569003431}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECA2465E-1FEC-4405-9733-4F5569003431}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECA2465E-1FEC-4405-9733-4F5569003431}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECA2465E-1FEC-4405-9733-4F5569003431}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
