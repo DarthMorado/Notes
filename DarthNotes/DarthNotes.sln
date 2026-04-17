@@ -4,6 +4,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DarthNotes", "DarthNotes\Da
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DarthNotes.Web", "DarthNotes.Web\DarthNotes.Web.csproj", "{ECA2465E-1FEC-4405-9733-4F5569003431}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DarthNotes.Db", "DarthNotes.Db\DarthNotes.Db.csproj", "{78750A32-CEA2-4E8F-9D91-55071E403512}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DarthNotes.Core", "DarthNotes.Core\DarthNotes.Core.csproj", "{605E57CE-2FBB-4F64-86BA-6E5E6CE6927A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,13 @@ Global
 		{ECA2465E-1FEC-4405-9733-4F5569003431}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECA2465E-1FEC-4405-9733-4F5569003431}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECA2465E-1FEC-4405-9733-4F5569003431}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78750A32-CEA2-4E8F-9D91-55071E403512}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78750A32-CEA2-4E8F-9D91-55071E403512}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78750A32-CEA2-4E8F-9D91-55071E403512}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78750A32-CEA2-4E8F-9D91-55071E403512}.Release|Any CPU.Build.0 = Release|Any CPU
+		{605E57CE-2FBB-4F64-86BA-6E5E6CE6927A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{605E57CE-2FBB-4F64-86BA-6E5E6CE6927A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{605E57CE-2FBB-4F64-86BA-6E5E6CE6927A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{605E57CE-2FBB-4F64-86BA-6E5E6CE6927A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
