@@ -1,4 +1,4 @@
-namespace DarthNotes.Core.Enums;
+namespace DarthNotes.Enums;
 
 public enum UserTypeEnum
 {

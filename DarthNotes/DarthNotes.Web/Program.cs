@@ -1,5 +1,5 @@
-using DarthNotes.Db;
-using DarthNotes.Db.Repositories;
+using DarthNotes.DB;
+using DarthNotes.DB.Repositories;
 using DarthNotes.Web.Services.Auth;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;

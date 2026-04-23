@@ -1,6 +1,6 @@
-using DarthNotes.Core.Enums;
+using DarthNotes.Enums;
 
-namespace DarthNotes.Db.Entities;
+namespace DarthNotes.DB.Entities;
 
 public class UserEntity : BaseEntity
 {

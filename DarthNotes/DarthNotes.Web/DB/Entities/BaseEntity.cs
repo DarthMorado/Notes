@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace DarthNotes.Db.Entities;
+namespace DarthNotes.DB.Entities;
 
 public class BaseEntity
 {

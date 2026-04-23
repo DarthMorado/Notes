@@ -1,8 +1,8 @@
 using System.Linq.Expressions;
-using DarthNotes.Db.Entities;
+using DarthNotes.DB.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace DarthNotes.Db.Repositories;
+namespace DarthNotes.DB.Repositories;
 
 public interface IBaseRepository<T>
     where T : BaseEntity

@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
-namespace DarthNotes.Db;
+namespace DarthNotes.DB;
 
 public class DatabaseFactory : IDesignTimeDbContextFactory<Database>
 {

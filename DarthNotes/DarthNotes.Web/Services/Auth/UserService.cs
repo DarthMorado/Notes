@@ -1,6 +1,6 @@
-using DarthNotes.Core.Enums;
-using DarthNotes.Db.Entities;
-using DarthNotes.Db.Repositories;
+using DarthNotes.Enums;
+using DarthNotes.DB.Entities;
+using DarthNotes.DB.Repositories;
 
 namespace DarthNotes.Web.Services.Auth;
 

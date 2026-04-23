@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using DarthNotes.Core.Enums;
+using DarthNotes.Enums;
 using Microsoft.AspNetCore.Mvc;
 using DarthNotes.Web.Models;
 using DarthNotes.Web.Services.Auth;
