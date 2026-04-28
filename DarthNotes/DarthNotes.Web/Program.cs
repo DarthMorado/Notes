@@ -1,5 +1,7 @@
+using System.Security.Claims;
 using DarthNotes.DB;
 using DarthNotes.DB.Repositories;
+using DarthNotes.Enums;
 using DarthNotes.Web.Services.Auth;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -47,7 +49,30 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
             options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
         })
-        .AddCookie()
+        .AddCookie(o =>
+        {
+            o.Events = new CookieAuthenticationEvents()
+            {
+                OnSigningIn = async context =>
+                {
+                    var identity = (ClaimsIdentity)context.Principal.Identity;
+
+                    var email = identity.FindFirst(ClaimTypes.Email)?.Value;
+
+                    if (!String.IsNullOrEmpty(email))
+                    {
+                        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+
+                        var dbUserId = await userService.GetUserIdAsync(email, UserTypeEnum.GoogleAuth);
+
+                        if (dbUserId.HasValue)
+                        {
+                            identity.AddClaim(new Claim("Id", dbUserId.Value.ToString()));
+                        }
+                    }
+                }
+            };
+        })
         .AddGoogle(options =>
         {
             options.ClientId = configuration["Authentication:Google:ClientId"];

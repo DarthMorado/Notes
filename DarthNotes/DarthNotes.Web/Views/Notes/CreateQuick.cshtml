@@ -1,0 +1,18 @@
+@model QuickNoteModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<input hidden asp-for="Id"></input>
+<input hidden asp-for="UserId"></input>
+
+<div class="input-group mb-3">
+    <div class="input-group-prepend">
+        <button class="btn btn-outline-secondary" type="button">Save</button>
+    </div>
+    <input asp-for="Name" type="text" class="form-control" placeholder="Name" aria-label="" aria-describedby="basic-addon1">
+</div>
+
+<textarea asp-for="Content" class="form-control full-textarea"></textarea>
