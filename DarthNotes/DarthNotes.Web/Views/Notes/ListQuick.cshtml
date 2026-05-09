@@ -1,0 +1,35 @@
+@using DarthNotes.Web.Extensions
+@model ListQuickModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+
+@foreach(var note in Model)
+{
+    <form asp-controller="Notes" method="POST">
+    <div class="card w-100 m-1">
+        <div class="card-header d-flex align-items-center p-0">
+            
+            <!-- Left side -->
+            <button class="btn btn-outline-secondary me-2" type="submit" asp-action="Edit">Edit</button>
+            <span class="badge bg-secondary me-2">Tag 1</span>
+            <span class="badge bg-secondary">Tag 1</span>
+            <!-- Spacer pushes right -->
+            <div class="ms-auto">
+                <button class="btn btn-danger" type="submit" asp-action="DeleteNote" asp-route-id="@note.Id" >Delete</button>
+            </div>
+            
+
+        </div>
+        <div class="card-body">
+            <div class="card-title">@note.Name</div>
+            <div class="card-text">@note.Content.Left(50)</div>
+        </div>
+        <div class="card-footer">
+        </div>
+    </div>
+    </form>
+}

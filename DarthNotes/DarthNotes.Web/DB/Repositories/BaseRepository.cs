@@ -10,6 +10,9 @@ public interface IBaseRepository<T>
     public Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate);
     public Task AddAsync(T entity);
     public Task SaveChangesAsync();
+    public Task<T> GetByIdAsync(int id);
+    public Task UpdateAsync(T entity);
+    Task RemoveAsync(T entity);
 }
 
 public class BaseRepository<T> : IBaseRepository<T>

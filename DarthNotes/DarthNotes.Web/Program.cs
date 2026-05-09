@@ -2,7 +2,9 @@ using System.Security.Claims;
 using DarthNotes.DB;
 using DarthNotes.DB.Repositories;
 using DarthNotes.Enums;
+using DarthNotes.Web.Services;
 using DarthNotes.Web.Services.Auth;
+using Mapster;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.EntityFrameworkCore;
@@ -41,6 +43,7 @@ app.Run();
 
 void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 {
+    builder.Services.AddHttpContextAccessor();
     services.AddControllersWithViews();
     
     // Add authentication
@@ -80,6 +83,10 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
         });
 
     services.AddScoped<IUserService, UserService>();
+    services.AddScoped<INotesService, NotesService>();
+    services.AddScoped<IUserContext, UserContext>();
+    
+    builder.Services.AddMapster();
 }
 
 void ConfigureDatabase(IServiceCollection services, IConfiguration configuration)
