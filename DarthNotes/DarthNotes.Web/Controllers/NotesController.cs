@@ -53,11 +53,20 @@ public class NotesController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> EditNoteAsync(int id)
+    public async Task<IActionResult> UpdateAsync(int? id)
     {
-        var note = _notesService.GetNoteAsync(id);
-        var model = _mapper.Map<QuickNoteModel>(note);
-        return View("EditNote", model);
+        QuickNoteModel model;
+        if (id.HasValue)
+        {
+            var note = await _notesService.GetNoteAsync(id.Value);
+            model = _mapper.Map<QuickNoteModel>(note);
+        }
+        else
+        {
+            model = new();
+        }
+
+        return View("Update", model);
     }
 
     // [HttpPost]
@@ -65,7 +74,7 @@ public class NotesController : Controller
     // {
     // }
 
-    [HttpPost("{id}")]
+    [HttpGet]
     public async Task<IActionResult> DeleteNoteAsync(int id)
     {
         await _notesService.DeleteAsync(id);

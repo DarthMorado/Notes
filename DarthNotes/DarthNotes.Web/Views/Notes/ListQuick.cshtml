@@ -9,17 +9,17 @@
 
 @foreach(var note in Model)
 {
-    <form asp-controller="Notes" method="POST">
+    <form asp-controller="Notes" method="GET" asp-route-id="@note.Id" >
     <div class="card w-100 m-1">
         <div class="card-header d-flex align-items-center p-0">
             
             <!-- Left side -->
-            <button class="btn btn-outline-secondary me-2" type="submit" asp-action="Edit">Edit</button>
+            <a asp-action="Update" asp-route-id="@note.Id" class="btn btn-outline-secondary me-2">Edit</a>
             <span class="badge bg-secondary me-2">Tag 1</span>
             <span class="badge bg-secondary">Tag 1</span>
             <!-- Spacer pushes right -->
             <div class="ms-auto">
-                <button class="btn btn-danger" type="submit" asp-action="DeleteNote" asp-route-id="@note.Id" >Delete</button>
+                <button class="btn btn-danger" type="submit" asp-action="DeleteNote" >Delete</button>
             </div>
             
 
