@@ -1,6 +1,6 @@
 namespace DarthNotes.Web.Models;
 
-public class QuickNoteDto : BaseNoteDto
+public class NoteModel : BaseNoteModel
 {
     
 }

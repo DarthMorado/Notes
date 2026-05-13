@@ -1,3 +1,4 @@
+using DarthNotes.DB;
 using DarthNotes.DB.Entities;
 using DarthNotes.DB.Repositories;
 using DarthNotes.Web.Models;
@@ -8,67 +9,78 @@ namespace DarthNotes.Web.Services;
 
 public interface INotesService
 {
-    Task UpdateAsync(QuickNoteDto note);
-    Task CreateQuickAsync(QuickNoteDto note);
-    Task<List<QuickNoteDto>> ListAsync(int userId);
-    Task<QuickNoteDto> GetNoteAsync(int id);
+    Task CreateAsync(NoteDto note);
+    Task<NoteDto> GetAsync(int id);
+    Task UpdateAsync(NoteDto note);
     Task<bool> DeleteAsync(int id);
+    
+    Task<List<NoteDto>> ListAsync(int userId);
+    
 }
 
 public class NotesService : INotesService
 {
     private readonly IMapper _mapper;    
-    private readonly IBaseRepository<QuickNoteEntity> _quickNoteRepository;
-    public readonly IUserContext _userContext;
+    private readonly IBaseRepository<NoteEntity> _noteRepository;
+    private readonly IUserContext _userContext;
+    private readonly IUnitOfWork _uow;
     
     public NotesService(IMapper mapper,
-        IBaseRepository<QuickNoteEntity> quickNoteRepository,
-        IUserContext userContext)
+        IBaseRepository<NoteEntity> noteRepository,
+        IUserContext userContext,
+        IUnitOfWork uow)
     {
+        _uow = uow;
         _mapper = mapper;
-        _quickNoteRepository = quickNoteRepository;
+        _noteRepository = noteRepository;
         _userContext = userContext;
     }
 
-    public async Task UpdateAsync(QuickNoteDto note)
+    public async Task UpdateAsync(NoteDto note)
     {
-        var entity = _mapper.Map<QuickNoteEntity>(note);
-        await _quickNoteRepository.UpdateAsync(entity);
-        await _quickNoteRepository.SaveChangesAsync();
+        var entity = _mapper.Map<NoteEntity>(note);
+        await _noteRepository.UpdateAsync(entity);
+        await _uow.SaveChangesAsync();
     }
     
-    public async Task CreateQuickAsync(QuickNoteDto note)
+    public async Task CreateAsync(NoteDto note)
     {
-        var entity = _mapper.Map<QuickNoteEntity>(note);
-        // entity.User = new()
-        // {
-        //     Id = entity.UserId
-        // };
-        await _quickNoteRepository.AddAsync(entity);
-        await _quickNoteRepository.SaveChangesAsync();
+        var entity = _mapper.Map<NoteEntity>(note);
+        
+        //Check user
+        if (entity.UserId != _userContext.GetUserId())
+        {
+            return;
+        }
+
+        using (var scope = _uow.CreateScope())
+        {
+            await _noteRepository.AddAsync(entity);
+            await scope.SaveChangesAsync();
+        }
     }
 
-    public async Task<List<QuickNoteDto>> ListAsync(int userId)
+    public async Task<List<NoteDto>> ListAsync(int userId)
     {
-        var entities = await _quickNoteRepository.FindAsync(x => x.UserId == userId);
-        var notes = _mapper.Map<List<QuickNoteDto>>(entities);
+        var entities = await _noteRepository.FindAsync(x => x.UserId == userId);
+        var notes = _mapper.Map<List<NoteDto>>(entities);
         return notes;
     }
 
-    public async Task<QuickNoteDto> GetNoteAsync(int id)
+    public async Task<NoteDto> GetAsync(int id)
     {
-        var note = await _quickNoteRepository.GetByIdAsync(id);
-        var noteDto = _mapper.Map<QuickNoteDto>(note);
+        var note = await _noteRepository.GetByIdAsync(id);
+        var noteDto = _mapper.Map<NoteDto>(note);
         return noteDto;
     }
 
     public async Task<bool> DeleteAsync(int id)
     {
-        var note = await _quickNoteRepository.GetByIdAsync(id);
+        var note = await _noteRepository.GetByIdAsync(id);
         if (note.UserId == _userContext.GetUserId())
         {
-            await _quickNoteRepository.RemoveAsync(note);
-            await _quickNoteRepository.SaveChangesAsync();
+            await _noteRepository.RemoveAsync(note);
+            await _noteRepository.SaveChangesAsync();
             return true;
         }
 

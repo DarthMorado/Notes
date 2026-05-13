@@ -17,6 +17,13 @@ ConfigureServices(builder.Services, builder.Configuration);
 
 var app = builder.Build();
 
+var updateDbConfig = builder.Configuration["AutoUpdateDatabase"];
+if (!String.IsNullOrWhiteSpace(updateDbConfig) && updateDbConfig.Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase))
+{
+    Console.WriteLine("Updating Database");
+    UpdateDatabase(app);
+}
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -95,4 +102,16 @@ void ConfigureDatabase(IServiceCollection services, IConfiguration configuration
         options.UseSqlServer(
             builder.Configuration.GetConnectionString("DefaultConnection")));
     services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+    services.AddScoped<IUnitOfWork, UnitOfWork>();
+    
+}
+
+void UpdateDatabase(WebApplication application)
+{
+    using (var scope = application.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<Database>();
+        db.Database.Migrate();
+
+    }
 }

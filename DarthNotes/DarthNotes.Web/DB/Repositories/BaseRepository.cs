@@ -13,6 +13,7 @@ public interface IBaseRepository<T>
     public Task<T> GetByIdAsync(int id);
     public Task UpdateAsync(T entity);
     Task RemoveAsync(T entity);
+    Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
 }
 
 public class BaseRepository<T> : IBaseRepository<T>
@@ -53,12 +54,6 @@ public class BaseRepository<T> : IBaseRepository<T>
         await Task.CompletedTask;
     }
 
-    public virtual async Task AddRangeAsync(IEnumerable<T> entities)
-    {
-        _dbSet.AddRange(entities);
-        await Task.CompletedTask;
-    }
-
     public virtual async Task UpdateAsync(T entity)
     {
         _context.Entry(entity).State = EntityState.Modified;
@@ -68,12 +63,6 @@ public class BaseRepository<T> : IBaseRepository<T>
     public virtual async Task RemoveAsync(T entity)
     {
         _dbSet.Remove(entity);
-        await Task.CompletedTask;
-    }
-
-    public virtual async Task RemoveRangeAsync(IEnumerable<T> entities)
-    {
-        _dbSet.RemoveRange(entities);
         await Task.CompletedTask;
     }
 

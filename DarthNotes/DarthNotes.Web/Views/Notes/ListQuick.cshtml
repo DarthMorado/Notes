@@ -1,5 +1,5 @@
 @using DarthNotes.Web.Extensions
-@model ListQuickModel
+@model NotesListModel
 
 @{
     ViewBag.Title = "title";
@@ -19,7 +19,7 @@
             <span class="badge bg-secondary">Tag 1</span>
             <!-- Spacer pushes right -->
             <div class="ms-auto">
-                <button class="btn btn-danger" type="submit" asp-action="DeleteNote" >Delete</button>
+                <button class="btn btn-danger" asp-route-id="@note.Id" type="submit" asp-action="DeleteNote" >Delete</button>
             </div>
             
 

@@ -3,7 +3,7 @@ namespace DarthNotes.Web.Services.Auth;
 public interface IUserContext
 {
     int? GetUserId();
-    string GetUserName();
+    string? GetUserName();
     bool IsLoggedIn();
 }
 
@@ -29,9 +29,15 @@ public class UserContext : IUserContext
         return userIdValue;
     }
 
-    public string GetUserName()
+    public string? GetUserName()
     {
-        throw new NotImplementedException();
+        var user = _httpContextAccessor.HttpContext?.User;
+        if (user is null) return null;
+        
+        var email = user.Claims?.FirstOrDefault(x => x.Type.Contains("email"))?.Value;
+        if (String.IsNullOrWhiteSpace(email)) return null;
+
+        return email;
     }
 
     public bool IsLoggedIn()

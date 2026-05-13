@@ -20,20 +20,20 @@ public class NotesController : Controller
     public async Task<IActionResult> ListQuick()
     {
         var userId = User.FindFirst("Id")?.Value;
-        var model = new ListQuickModel();
+        var model = new NotesListModel();
         if (int.TryParse(userId, out var userIdValue))
         {
             var notes = await _notesService.ListAsync(userIdValue);
-            model = _mapper.Map<ListQuickModel>(notes);
+            model = _mapper.Map<NotesListModel>(notes);
         }
 
         return View("ListQuick", model);
     }
     
     [HttpPost]
-    public async Task<IActionResult> SaveQuick(QuickNoteModel model)
+    public async Task<IActionResult> SaveQuick(NoteModel model)
     {
-        var dto = _mapper.Map<QuickNoteDto>(model);
+        var dto = _mapper.Map<NoteDto>(model);
         var userId = User.FindFirst("Id")?.Value;
         if (int.TryParse(userId, out var userIdValue))
         {
@@ -42,7 +42,7 @@ public class NotesController : Controller
 
         if (dto.Id is null || dto.Id == default(int))
         {
-            await _notesService.CreateQuickAsync(dto);
+            await _notesService.CreateAsync(dto);
         }
         else
         {
@@ -55,11 +55,11 @@ public class NotesController : Controller
     [HttpGet]
     public async Task<IActionResult> UpdateAsync(int? id)
     {
-        QuickNoteModel model;
+        NoteModel model;
         if (id.HasValue)
         {
-            var note = await _notesService.GetNoteAsync(id.Value);
-            model = _mapper.Map<QuickNoteModel>(note);
+            var note = await _notesService.GetAsync(id.Value);
+            model = _mapper.Map<NoteModel>(note);
         }
         else
         {
@@ -83,7 +83,7 @@ public class NotesController : Controller
     
     public async Task<IActionResult> CreateQuick()
     {
-        var model = new QuickNoteModel();
+        var model = new NoteModel();
         return View("CreateQuick", model);
     }
 }
