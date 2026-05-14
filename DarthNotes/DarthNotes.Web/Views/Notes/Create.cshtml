@@ -5,7 +5,7 @@
     Layout = "_Layout";
 }
 
-<form asp-action="SaveQuick">
+<form asp-action="Save">
     <input hidden asp-for="Id"></input>
 
     <div class="input-group mb-3">
@@ -15,5 +15,5 @@
         <input asp-for="Name" type="text" class="form-control" placeholder="Name" aria-label="" aria-describedby="basic-addon1">
     </div>
 
-    <textarea asp-for="Content" class="form-control full-textarea"></textarea>
+    <textarea rows="1" asp-for="Content" class="form-control full-textarea auto-grow"></textarea>
 </form>

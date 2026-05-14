@@ -17,7 +17,7 @@ public class NotesController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> ListQuick()
+    public async Task<IActionResult> ListAsync()
     {
         var userId = User.FindFirst("Id")?.Value;
         var model = new NotesListModel();
@@ -27,11 +27,11 @@ public class NotesController : Controller
             model = _mapper.Map<NotesListModel>(notes);
         }
 
-        return View("ListQuick", model);
+        return View(model);
     }
     
     [HttpPost]
-    public async Task<IActionResult> SaveQuick(NoteModel model)
+    public async Task<IActionResult> SaveAsync(NoteModel model)
     {
         var dto = _mapper.Map<NoteDto>(model);
         var userId = User.FindFirst("Id")?.Value;
@@ -49,7 +49,8 @@ public class NotesController : Controller
             await _notesService.UpdateAsync(dto);
         }
 
-        return RedirectToAction("Index","Home");
+        model.Mode = ModelMode.View;
+        return View("Note", model);
     }
 
     [HttpGet]
@@ -60,30 +61,43 @@ public class NotesController : Controller
         {
             var note = await _notesService.GetAsync(id.Value);
             model = _mapper.Map<NoteModel>(note);
+            model.Mode = ModelMode.Update;
         }
         else
         {
             model = new();
+            model.Mode = ModelMode.Create;
         }
-
-        return View("Update", model);
-    }
-
-    // [HttpPost]
-    // public async Task<IActionResult> EditNoteAsync(QuickNoteModel model)
-    // {
-    // }
-
-    [HttpGet]
-    public async Task<IActionResult> DeleteNoteAsync(int id)
-    {
-        await _notesService.DeleteAsync(id);
-        return RedirectToAction("ListQuick");
+        
+        return View("Note", model);
     }
     
-    public async Task<IActionResult> CreateQuick()
+    
+    [HttpGet]
+    public async Task<IActionResult> ViewAsync(int id)
     {
-        var model = new NoteModel();
-        return View("CreateQuick", model);
+        NoteModel model;
+        var note = await _notesService.GetAsync(id);
+        model = _mapper.Map<NoteModel>(note);
+        model.Mode = ModelMode.View;
+        
+        return View("Note", model);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> DeleteAsync(int id)
+    {
+        await _notesService.DeleteAsync(id);
+        return RedirectToAction("List");
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> CreateAsync()
+    {
+        var model = new NoteModel()
+        {
+            Mode = ModelMode.Create
+        };
+        return View(model);
     }
 }

@@ -35,3 +35,15 @@ body {
   height: 100%;
   resize: none; /* optional */
 }
+
+
+/* Darth part */
+
+/* Auto-grow TextArea */
+textarea.auto-grow {
+  width:100%;
+  resize:none;
+  overflow:hidden;
+  min-height:40px;
+  padding:8px;
+}

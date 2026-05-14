@@ -14,12 +14,13 @@
         <div class="card-header d-flex align-items-center p-0">
             
             <!-- Left side -->
+            <a asp-action="View" asp-route-id="@note.Id" class="btn btn-outline-secondary me-2">View</a>
             <a asp-action="Update" asp-route-id="@note.Id" class="btn btn-outline-secondary me-2">Edit</a>
             <span class="badge bg-secondary me-2">Tag 1</span>
             <span class="badge bg-secondary">Tag 1</span>
             <!-- Spacer pushes right -->
             <div class="ms-auto">
-                <button class="btn btn-danger" asp-route-id="@note.Id" type="submit" asp-action="DeleteNote" >Delete</button>
+                <button class="btn btn-danger" asp-route-id="@note.Id" type="submit" asp-action="Delete" >Delete</button>
             </div>
             
 

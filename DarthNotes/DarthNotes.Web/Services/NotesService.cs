@@ -56,7 +56,7 @@ public class NotesService : INotesService
         using (var scope = _uow.CreateScope())
         {
             await _noteRepository.AddAsync(entity);
-            await scope.SaveChangesAsync();
+            await scope.Complete();
         }
     }
 

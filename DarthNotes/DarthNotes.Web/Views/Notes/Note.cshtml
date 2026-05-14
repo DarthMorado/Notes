@@ -1,0 +1,36 @@
+@model NoteModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<form method="POST" asp-action="Save" >
+    <input hidden asp-for="Id"></input>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            @if (Model.Mode == ModelMode.View)
+            {
+                <a class="btn btn-outline-secondary" asp-route-id="@Model.Id"  asp-action="Update">Edit</a>
+            }
+            else
+            {
+                <button class="btn btn-outline-secondary" type="submit" asp-action="Save">Save</button>
+            }
+        </div>
+        <input asp-for="Name" type="text" class="form-control" placeholder="Name" aria-label="" aria-describedby="basic-addon1">
+        <div class="ms-auto">
+            <a class="btn btn-danger" asp-route-id="@Model.Id" asp-action="Delete" >Delete</a>
+        </div>
+    </div>
+    
+    @if (Model.Mode == ModelMode.View)
+    {
+        <textarea readonly asp-for="Content" class="form-control full-textarea auto-grow" ></textarea>    
+    }
+    else
+    {
+        <textarea asp-for="Content" class="form-control full-textarea auto-grow" ></textarea>
+    }
+</form>
