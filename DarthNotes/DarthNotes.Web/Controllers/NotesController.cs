@@ -42,7 +42,7 @@ public class NotesController : Controller
 
         if (dto.Id is null || dto.Id == default(int))
         {
-            await _notesService.CreateAsync(dto);
+            model.Id = await _notesService.CreateAsync(dto);
         }
         else
         {

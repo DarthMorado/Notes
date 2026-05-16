@@ -12,4 +12,5 @@ public class Database : DbContext
     
     public DbSet<UserEntity> Users { get; set; }
     public DbSet<NoteEntity> QuickNotes { get; set; }
+    public DbSet<TagEntity> Tags { get; set; }
 }

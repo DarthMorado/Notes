@@ -9,7 +9,7 @@ namespace DarthNotes.Web.Services;
 
 public interface INotesService
 {
-    Task CreateAsync(NoteDto note);
+    Task<int?> CreateAsync(NoteDto note);
     Task<NoteDto> GetAsync(int id);
     Task UpdateAsync(NoteDto note);
     Task<bool> DeleteAsync(int id);
@@ -43,14 +43,14 @@ public class NotesService : INotesService
         await _uow.SaveChangesAsync();
     }
     
-    public async Task CreateAsync(NoteDto note)
+    public async Task<int?> CreateAsync(NoteDto note)
     {
         var entity = _mapper.Map<NoteEntity>(note);
         
         //Check user
         if (entity.UserId != _userContext.GetUserId())
         {
-            return;
+            return null;
         }
 
         using (var scope = _uow.CreateScope())
@@ -58,6 +58,8 @@ public class NotesService : INotesService
             await _noteRepository.AddAsync(entity);
             await scope.Complete();
         }
+
+        return entity.Id;
     }
 
     public async Task<List<NoteDto>> ListAsync(int userId)
