@@ -61,6 +61,8 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
         })
         .AddCookie(o =>
         {
+            o.Cookie.SameSite = SameSiteMode.None;
+            o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             o.Events = new CookieAuthenticationEvents()
             {
                 OnSigningIn = async context =>
