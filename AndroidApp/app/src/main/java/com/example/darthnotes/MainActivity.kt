@@ -10,6 +10,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.runtime.Composable
@@ -18,12 +19,42 @@ import androidx.compose.ui.viewinterop.AndroidView
 
 class MainActivity : ComponentActivity() {
 
+    companion object {
+        var webView: WebView? = null
+    }
+
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        handleDeepLink(intent)
+
         setContent {
             WebPage()
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+
+        handleDeepLink(intent)
+    }
+
+    private fun handleDeepLink(intent: Intent?) {
+
+        val data = intent?.data ?: return
+
+        if (
+            data.scheme == "darthnotes" &&
+            data.host == "auth-success"
+        ) {
+
+            webView?.post {
+
+                CookieManager.getInstance().flush()
+
+                webView?.loadUrl("https://notes.darth.lv")
+            }
         }
     }
 }
@@ -40,12 +71,19 @@ fun WebPage() {
 
             WebView(context).apply {
 
+                MainActivity.webView = this
+
                 settings.javaScriptEnabled = true
                 settings.domStorageEnabled = true
 
                 val cookieManager = CookieManager.getInstance()
+
                 cookieManager.setAcceptCookie(true)
-                cookieManager.setAcceptThirdPartyCookies(this, true)
+
+                cookieManager.setAcceptThirdPartyCookies(
+                    this,
+                    true
+                )
 
                 webViewClient = object : WebViewClient() {
 
@@ -56,11 +94,24 @@ fun WebPage() {
 
                         val url = request?.url.toString()
 
-                        // Open Google login externally
-                        if (url.contains("accounts.google.com")) {
+                        if (url.contains("GoogleLogin")) {
 
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                            context.startActivity(intent)
+                            val loginUrl = Uri.parse(url)
+                                .buildUpon()
+                                .appendQueryParameter(
+                                    "isForApp",
+                                    "true"
+                                )
+                                .build()
+
+                            val customTabsIntent =
+                                CustomTabsIntent.Builder()
+                                    .build()
+
+                            customTabsIntent.launchUrl(
+                                context,
+                                loginUrl
+                            )
 
                             return true
                         }

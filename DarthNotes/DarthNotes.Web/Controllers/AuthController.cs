@@ -49,7 +49,7 @@ public class AuthController : Controller
 
         var token = await _userService.GenerateAuthToken(userId);
 
-        return View("test", "token");
+        return Redirect("darthnotes://auth-success");
     }
     
     public async Task<IActionResult> GoogleResponse()
