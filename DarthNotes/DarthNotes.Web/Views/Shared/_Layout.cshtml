@@ -47,7 +47,7 @@
                     @if (User.Identity is not null && User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" >@User.Identity.Name</a>
+                            <a class="nav-link text-dark" asp-controller="Auth" asp-action="Profile">@User.Identity.Name</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Logout">Logout</a>
@@ -57,6 +57,9 @@
                     {
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="GoogleLogin">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="MultiLogin">MultiLogin</a>
                         </li>
                     }
                 </ul>

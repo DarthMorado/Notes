@@ -1,0 +1,12 @@
+@model LoginModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<form method="POST" asp-action="SignIn">
+    <input asp-for="Username"></input>
+    <input type="password" asp-for="Password"></input>
+    <button type="submit">Save</button>
+</form>

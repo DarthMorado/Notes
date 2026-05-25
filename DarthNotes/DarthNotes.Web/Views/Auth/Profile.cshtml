@@ -1,0 +1,20 @@
+@model UserModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>Profile for @Model.Username</h2>
+
+<form method="POST" asp-action="UpdateProfile">
+    <input hidden asp-for="Id"></input>
+    <div class="form-check">
+        <input asp-for="IsPasswordAuthEnabled" class="form-check-input"/>
+        <label asp-for="IsPasswordAuthEnabled" class="form-check-label"></label>
+    </div>
+    <div>
+        <input asp-for="Password" type="password"></input>
+    </div>
+    <button type="submit">Save</button>
+</form>
