@@ -13,6 +13,7 @@ public interface IUserService
     public Task<int?> GetUserIdAsync(string email, UserTypeEnum userType);
     public Task<UserDto> GetUserAsync(int userId);
     public Task UpdateUserProfileAsync(int userId, bool isPasswordAuthEnabled, string? additionalPassword);
+    Task<UserDto?> GetUserByOtpAsync(string otp);
     Task<string?> GenerateAuthToken(int userId);
 }
 
@@ -56,6 +57,17 @@ public class UserService : IUserService
         var entity = await _usersRepository.GetByIdAsync(userId);
         var user = _mapper.Map<UserDto>(entity);
         return user;
+    }
+
+    public async Task<UserDto?> GetUserByOtpAsync(string otp)
+    {
+        var foundUsers = await _usersRepository.FindAsync(x => x.Token == otp);
+        if (!foundUsers.Any())
+        {
+            return null;
+        }
+
+        return _mapper.Map<UserDto>(foundUsers.First());
     }
 
     public async Task UpdateUserProfileAsync(int userId, bool isPasswordAuthEnabled, string? additionalPassword)

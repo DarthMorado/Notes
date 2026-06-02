@@ -1,10 +1,12 @@
 using System.Diagnostics;
+using System.Security.Claims;
 using DarthNotes.Enums;
 using Microsoft.AspNetCore.Mvc;
 using DarthNotes.Web.Models;
 using DarthNotes.Web.Services.Auth;
 using MapsterMapper;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
 
@@ -59,6 +61,40 @@ public class AuthController : Controller
         return RedirectToAction("Index", "Home");
     }
 
+    [HttpGet]
+    public async Task<IActionResult> LoginByOTP(string? otp)
+    {
+        if (otp is null)
+        {
+            return Unauthorized();
+        }
+        
+        var user = await _userService.GetUserByOtpAsync(otp);
+        if (user is null)
+        {
+            return Unauthorized();
+        }
+        
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, user.Username),
+            new Claim(ClaimTypes.Email, user.Username),
+            new Claim("Id", user.Id.ToString())
+        };
+
+        var identity = new ClaimsIdentity(
+            claims,
+            CookieAuthenticationDefaults.AuthenticationScheme);
+
+        var principal = new ClaimsPrincipal(identity);
+
+        await HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            principal);
+
+        return RedirectToAction("Index", "Home");
+    }
+    
     private async Task<int> GetUserIdFromClaims()
     {
         var result = await HttpContext.AuthenticateAsync();
