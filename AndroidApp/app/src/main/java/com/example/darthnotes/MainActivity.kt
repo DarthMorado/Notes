@@ -41,19 +41,28 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun handleDeepLink(intent: Intent?) {
+        val data: Uri? = intent?.data
 
-        val data = intent?.data ?: return
+
 
         if (
+            data != null &&
             data.scheme == "darthnotes" &&
             data.host == "auth-success"
         ) {
+            val token = data.getQueryParameter("token")
+            if (!token.isNullOrEmpty()) {
+                webView?.post {
+                    CookieManager.getInstance().flush()
+                    webView?.loadUrl("https://notes.darth.lv/Auth/LoginByOTP?otp={"+token+"}")
+                }
+            }
+            else {
 
-            webView?.post {
-
-                CookieManager.getInstance().flush()
-
-                webView?.loadUrl("https://notes.darth.lv")
+                webView?.post {
+                    CookieManager.getInstance().flush()
+                    webView?.loadUrl("https://notes.darth.lv")
+                }
             }
         }
     }

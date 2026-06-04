@@ -51,7 +51,7 @@ public class AuthController : Controller
 
         var token = await _userService.GenerateAuthToken(userId);
 
-        return Redirect("darthnotes://auth-success");
+        return Redirect($"darthnotes://auth-success?token={Uri.EscapeDataString(token)}");
     }
     
     public async Task<IActionResult> GoogleResponse()
