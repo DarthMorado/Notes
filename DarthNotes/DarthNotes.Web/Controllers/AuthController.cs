@@ -140,9 +140,12 @@ public class AuthController : Controller
         return View("Login", model);
     }
 
-    // [HttpPost]
-    // public async Task<IActionResult> SignIn(LoginModel model)
-    // {
-    //     
-    // }
+    [HttpGet]
+    public async Task<IActionResult> Test()
+    {
+        return RedirectToAction(
+            "LoginByOTP",
+            "Auth",
+            new { otp = "test" });
+    }
 }
