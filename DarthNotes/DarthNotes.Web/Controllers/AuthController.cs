@@ -167,9 +167,10 @@ public class AuthController : Controller
         var token = await _userService.GenerateAuthToken(userId);
 
         
-        return RedirectToAction(
-            "LoginByOTP",
-            "Auth",
-            new { otp = token});
+        return Redirect($"darthnotes://auth-success?token={Uri.EscapeDataString(token)}");
+        // return RedirectToAction(
+        //     "LoginByOTP",
+        //     "Auth",
+        //     new { otp = token});
     }
 }
