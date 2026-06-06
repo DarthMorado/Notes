@@ -163,14 +163,13 @@ public class AuthController : Controller
     [HttpGet]
     public async Task<IActionResult> GoogleTestAppResponse()
     {
+        int userId = await GetUserIdFromClaims();
+        var token = await _userService.GenerateAuthToken(userId);
+
+        
         return RedirectToAction(
             "LoginByOTP",
             "Auth",
-            new { otp = "test" });
-    //     int userId = await GetUserIdFromClaims();
-    //
-    //     var token = await _userService.GenerateAuthToken(userId);
-    //
-    //     return Redirect($"darthnotes://auth-success?token={Uri.EscapeDataString(token)}");
+            new { otp = token});
     }
 }

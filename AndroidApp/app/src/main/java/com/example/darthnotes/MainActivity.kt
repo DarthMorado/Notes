@@ -103,6 +103,22 @@ fun WebPage() {
 
                         val url = request?.url.toString()
 
+                        if (url.lowercase().contains("test"))
+                        {
+                            val customTabsIntent =
+                                CustomTabsIntent.Builder()
+                                    .build()
+
+                            customTabsIntent.launchUrl(
+                                context,
+                                Uri.parse(url)
+                                    .buildUpon()
+                                    .build()
+                            )
+
+                            return true
+                        }
+
                         if (url.contains("GoogleLogin")) {
 
                             val loginUrl = Uri.parse(url)
