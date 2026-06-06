@@ -148,4 +148,29 @@ public class AuthController : Controller
             "Auth",
             new { otp = "test" });
     }
+    
+    [HttpGet]
+    public async Task<IActionResult> TestG()
+    {
+        string redirectUrl; 
+        redirectUrl = Url.Action("GoogleTestAppResponse");
+        
+        var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
+
+        return Challenge(properties, GoogleDefaults.AuthenticationScheme);
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GoogleTestAppResponse()
+    {
+        return RedirectToAction(
+            "LoginByOTP",
+            "Auth",
+            new { otp = "test" });
+    //     int userId = await GetUserIdFromClaims();
+    //
+    //     var token = await _userService.GenerateAuthToken(userId);
+    //
+    //     return Redirect($"darthnotes://auth-success?token={Uri.EscapeDataString(token)}");
+    }
 }
