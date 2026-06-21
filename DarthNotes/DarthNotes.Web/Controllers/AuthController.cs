@@ -32,8 +32,7 @@ public class AuthController : Controller
         string redirectUrl;
         if (isForApp)
         {
-            //redirectUrl = Url.Action("GoogleAppResponse");
-            redirectUrl = Url.Action("GoogleTestAppResponse");
+            redirectUrl = Url.Action("GoogleAppResponse");
         }
         else
         {
@@ -46,23 +45,13 @@ public class AuthController : Controller
         //todo[vg]: read about Challenge
     }
 
+    [HttpGet]
     public async Task<IActionResult> GoogleAppResponse()
     {
         int userId = await GetUserIdFromClaims();
 
         var token = await _userService.GenerateAuthToken(userId);
 
-        return Redirect($"darthnotes://auth-success?token={Uri.EscapeDataString(token)}");
-    }
-    
-    
-    [HttpGet]
-    public async Task<IActionResult> GoogleTestAppResponse()
-    {
-        int userId = await GetUserIdFromClaims();
-        var token = await _userService.GenerateAuthToken(userId);
-
-        
         return Redirect($"darthnotes://auth-success?token={Uri.EscapeDataString(token)}");
     }
     
@@ -144,24 +133,5 @@ public class AuthController : Controller
         await _userService.UpdateUserProfileAsync(model.Id, model.IsPasswordAuthEnabled, model.Password);
         return RedirectToAction("Profile");
     }
-
-    // [HttpGet]
-    // public async Task<IActionResult> MultiLoginAsync()
-    // {
-    //     var model = new LoginModel();
-    //     return View("Login", model);
-    // }
-    
-    [HttpGet]
-    public async Task<IActionResult> TestG()
-    {
-        string redirectUrl; 
-        redirectUrl = Url.Action("GoogleTestAppResponse");
-        
-        var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
-
-        return Challenge(properties, GoogleDefaults.AuthenticationScheme);
-    }
-    
     
 }
