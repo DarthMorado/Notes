@@ -12,15 +12,25 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.runtime.*
+import androidx.compose.ui.unit.dp
+import androidx.core.view.get
 
 class MainActivity : ComponentActivity() {
 
     companion object {
         var webView: WebView? = null
+        var logText by mutableStateOf("Ready")
+        fun log(message: String) {
+            logText = message
+        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -37,28 +47,30 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
 
+        MainActivity.log("Deep link.")
         handleDeepLink(intent)
     }
 
     private fun handleDeepLink(intent: Intent?) {
         val data: Uri? = intent?.data
 
-
+        MainActivity.log("Deep link url: $data")
 
         if (
             data != null &&
             data.scheme == "darthnotes" &&
             data.host == "auth-success"
         ) {
+            MainActivity.log("Deep link auth-succsess")
+
             val token = data.getQueryParameter("token")
+
+            MainActivity.log("Deep link token: $token")
             if (!token.isNullOrEmpty()) {
-                webView?.post {
-                    CookieManager.getInstance().flush()
-                    webView?.loadUrl("https://notes.darth.lv/Auth/LoginByOTP?otp={"+token+"}")
-                }
+                webView?.loadUrl("https://notes.darth.lv/Auth/LoginByOTP?otp="+token)
             }
             else {
-
+                MainActivity.log("Deep link token null")
                 webView?.post {
                     CookieManager.getInstance().flush()
                     webView?.loadUrl("https://notes.darth.lv")
@@ -147,6 +159,14 @@ fun WebPage() {
 
                 loadUrl("https://notes.darth.lv")
             }
+
         }
+    )
+
+    Text(
+        text = MainActivity.logText,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
     )
 }

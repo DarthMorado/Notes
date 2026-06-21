@@ -32,7 +32,8 @@ public class AuthController : Controller
         string redirectUrl;
         if (isForApp)
         {
-            redirectUrl = Url.Action("GoogleAppResponse");
+            //redirectUrl = Url.Action("GoogleAppResponse");
+            redirectUrl = Url.Action("GoogleTestAppResponse");
         }
         else
         {
@@ -51,6 +52,17 @@ public class AuthController : Controller
 
         var token = await _userService.GenerateAuthToken(userId);
 
+        return Redirect($"darthnotes://auth-success?token={Uri.EscapeDataString(token)}");
+    }
+    
+    
+    [HttpGet]
+    public async Task<IActionResult> GoogleTestAppResponse()
+    {
+        int userId = await GetUserIdFromClaims();
+        var token = await _userService.GenerateAuthToken(userId);
+
+        
         return Redirect($"darthnotes://auth-success?token={Uri.EscapeDataString(token)}");
     }
     
@@ -133,21 +145,12 @@ public class AuthController : Controller
         return RedirectToAction("Profile");
     }
 
-    [HttpGet]
-    public async Task<IActionResult> MultiLoginAsync()
-    {
-        var model = new LoginModel();
-        return View("Login", model);
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> Test()
-    {
-        return RedirectToAction(
-            "LoginByOTP",
-            "Auth",
-            new { otp = "test" });
-    }
+    // [HttpGet]
+    // public async Task<IActionResult> MultiLoginAsync()
+    // {
+    //     var model = new LoginModel();
+    //     return View("Login", model);
+    // }
     
     [HttpGet]
     public async Task<IActionResult> TestG()
@@ -160,17 +163,5 @@ public class AuthController : Controller
         return Challenge(properties, GoogleDefaults.AuthenticationScheme);
     }
     
-    [HttpGet]
-    public async Task<IActionResult> GoogleTestAppResponse()
-    {
-        int userId = await GetUserIdFromClaims();
-        var token = await _userService.GenerateAuthToken(userId);
-
-        
-        return Redirect($"darthnotes://auth-success?token={Uri.EscapeDataString(token)}");
-        // return RedirectToAction(
-        //     "LoginByOTP",
-        //     "Auth",
-        //     new { otp = token});
-    }
+    
 }
