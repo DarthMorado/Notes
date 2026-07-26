@@ -1,3 +1,4 @@
+using DarthNotes.Web.DTO;
 using DarthNotes.Web.Models;
 using DarthNotes.Web.Services;
 using MapsterMapper;
@@ -33,7 +34,18 @@ public class NotesController : Controller
     [HttpPost]
     public async Task<IActionResult> SaveAsync(NoteModel model)
     {
+        var tags = new List<string>();
+        SeparateTagsFromName(model.Name, out tags);
+        
         var dto = _mapper.Map<NoteDto>(model);
+        if (tags.Any())
+        {
+            dto.Tags = tags.Select(x => new TagDto()
+            {
+                Name = x
+            }).ToList();
+        }
+        
         var userId = User.FindFirst("Id")?.Value;
         if (int.TryParse(userId, out var userIdValue))
         {
@@ -99,5 +111,14 @@ public class NotesController : Controller
             Mode = ModelMode.Create
         };
         return View(model);
+    }
+
+    private string SeparateTagsFromName(string name, out List<string> tags)
+    {
+        tags = new();
+        if (String.IsNullOrEmpty(name)) return name;
+        var parts = name.Split(" ", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+        tags = parts.Where(x => x.StartsWith("#")).ToList();
+        return name;
     }
 }

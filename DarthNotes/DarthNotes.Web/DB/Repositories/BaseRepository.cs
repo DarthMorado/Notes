@@ -7,7 +7,7 @@ namespace DarthNotes.DB.Repositories;
 public interface IBaseRepository<T>
     where T : BaseEntity
 {
-    public Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate);
+    public Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate, bool noTracking = false);
     public Task AddAsync(T entity);
     public Task SaveChangesAsync();
     public Task<T> GetByIdAsync(int id);
@@ -43,9 +43,15 @@ public class BaseRepository<T> : IBaseRepository<T>
         return await _dbSet.FindAsync(id);
     }
 
-    public virtual async Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate)
+    public virtual async Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate, bool noTracking = false)
     {
-        return await _dbSet.Where(predicate).ToListAsync();
+        var query = _dbSet.Where(predicate);
+        if (noTracking)
+        {
+            query = query.AsNoTracking();
+        }
+        
+        return await query.ToListAsync();
     }
 
     public virtual async Task AddAsync(T entity)

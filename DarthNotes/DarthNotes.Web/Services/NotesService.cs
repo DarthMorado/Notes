@@ -1,6 +1,7 @@
 using DarthNotes.DB;
 using DarthNotes.DB.Entities;
 using DarthNotes.DB.Repositories;
+using DarthNotes.Web.DTO;
 using DarthNotes.Web.Models;
 using DarthNotes.Web.Services.Auth;
 using MapsterMapper;
@@ -22,11 +23,13 @@ public class NotesService : INotesService
 {
     private readonly IMapper _mapper;    
     private readonly IBaseRepository<NoteEntity> _noteRepository;
+    private readonly IBaseRepository<TagEntity> _tagsRepository;
     private readonly IUserContext _userContext;
     private readonly IUnitOfWork _uow;
     
     public NotesService(IMapper mapper,
         IBaseRepository<NoteEntity> noteRepository,
+        IBaseRepository<TagEntity> tagsRepository,
         IUserContext userContext,
         IUnitOfWork uow)
     {
@@ -34,6 +37,7 @@ public class NotesService : INotesService
         _mapper = mapper;
         _noteRepository = noteRepository;
         _userContext = userContext;
+        _tagsRepository = tagsRepository;
     }
 
     public async Task UpdateAsync(NoteDto note)
@@ -42,9 +46,28 @@ public class NotesService : INotesService
         await _noteRepository.UpdateAsync(entity);
         await _uow.SaveChangesAsync();
     }
+
+    private async Task<TagEntity> GetTagEntityAsync(string tagName)
+    {
+        var existingTags = await _tagsRepository.FindAsync(x => x.Name == tagName);
+        if (existingTags != null && existingTags.Any())
+        {
+            return existingTags.First();
+        }
+
+        var newTag = new TagEntity()
+        {
+            Name = tagName
+        };
+        await _tagsRepository.AddAsync(newTag);
+        await _tagsRepository.SaveChangesAsync();
+
+        return newTag;
+    }
     
     public async Task<int?> CreateAsync(NoteDto note)
     {
+        //await PrepareAsync(note); //Populates Tags parameter
         var entity = _mapper.Map<NoteEntity>(note);
         
         //Check user
@@ -55,6 +78,13 @@ public class NotesService : INotesService
 
         using (var scope = _uow.CreateScope())
         {
+            entity.Tags = new();
+            foreach (var tagName in ParseTagNames(entity.Name))
+            {
+                var tag = await GetTagEntityAsync(tagName);
+                entity.Tags.Add(tag);
+            }
+            
             await _noteRepository.AddAsync(entity);
             await scope.Complete();
         }
@@ -88,4 +118,33 @@ public class NotesService : INotesService
 
         return false;
     }
+
+    private List<string> ParseTagNames(string input)
+    {
+        return input.Split(' ', '\r', '\n')
+            .Where(x => !String.IsNullOrWhiteSpace(x)).ToList()
+            .Where(x => x.StartsWith("#"))
+            .ToList();
+    }
+    
+    // private async Task PrepareAsync(NoteDto note)
+    // {
+    //     note.Tags = note.Name.Split(' ', '\r', '\n')
+    //         .Where(x => !String.IsNullOrWhiteSpace(x)).ToList()
+    //         .Where(x => x.StartsWith("#"))
+    //         //.ToList();
+    //         .Select(x => new TagDto() { Name = x })
+    //         .ToList();
+    //
+    //     foreach (var tag in note.Tags)
+    //     {
+    //             var existingTags = await _tagsRepository.FindAsync(x => x.Name == tag.Name, noTracking: true);
+    //             if (existingTags.Any())
+    //             {
+    //                 var existingTag = existingTags.First();
+    //                 tag.Id = existingTag.Id;
+    //             }
+    //     }
+    //
+    // }
 }
