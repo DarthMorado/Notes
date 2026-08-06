@@ -25,6 +25,14 @@
         </div>
     </div>
     
+    @if (Model.Tags != null && Model.Tags.Any())
+    {
+        @foreach (var tag in Model.Tags)
+        {
+            <span class="badge bg-secondary">@tag</span>
+        }
+    }
+    
     @if (Model.Mode == ModelMode.View)
     {
         <textarea readonly asp-for="Content" class="form-control full-textarea auto-grow" ></textarea>    

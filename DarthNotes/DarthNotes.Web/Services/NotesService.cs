@@ -22,13 +22,13 @@ public interface INotesService
 public class NotesService : INotesService
 {
     private readonly IMapper _mapper;    
-    private readonly IBaseRepository<NoteEntity> _noteRepository;
+    private readonly INotesRepository _noteRepository;
     private readonly IBaseRepository<TagEntity> _tagsRepository;
     private readonly IUserContext _userContext;
     private readonly IUnitOfWork _uow;
     
     public NotesService(IMapper mapper,
-        IBaseRepository<NoteEntity> noteRepository,
+        INotesRepository noteRepository,
         IBaseRepository<TagEntity> tagsRepository,
         IUserContext userContext,
         IUnitOfWork uow)

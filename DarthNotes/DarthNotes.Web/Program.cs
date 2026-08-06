@@ -105,7 +105,8 @@ void ConfigureDatabase(IServiceCollection services, IConfiguration configuration
             builder.Configuration.GetConnectionString("DefaultConnection")));
     services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
     services.AddScoped<IUnitOfWork, UnitOfWork>();
-    
+    services.AddScoped<INotesRepository, NotesRepository>();
+
 }
 
 void UpdateDatabase(WebApplication application)
