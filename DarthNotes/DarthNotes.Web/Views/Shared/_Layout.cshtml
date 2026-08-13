@@ -21,62 +21,161 @@
 </head>
 <body class="d-flex flex-column vh-100">
 <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    @* gpt: *@
+    <nav class="navbar navbar-dark bg-dark border-bottom">
         <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">DarthNotes v.@AssemblyVersion</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    @if (User.Identity is not null && User.Identity.IsAuthenticated)
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Notes" asp-action="List">
-                                <i class="bi bi-list"></i>
-                                <span class="d-none d-md-inline">List</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Notes" asp-action="Create">
-                                <i class="bi bi-file-earmark-plus"></i>
-                                <span class="d-none d-md-inline">New</span>
-                            </a>
-                        </li>
-                    }
-                </ul>
+
+            <!-- =========================================================
+                 LEFT SECTION
+                 ========================================================= -->
+            <div class="d-flex align-items-center">
+                <!-- Aka logo -->
+                <div class="navbar-brand">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">DN</a>
+                </div>
+                @if (User.Identity is not null && User.Identity.IsAuthenticated)
+                {
+                    <!-- List -->
+                    <a class="nav-link d-flex text-light ms-1" asp-area="" asp-controller="Notes" asp-action="List">
+                        <i class="bi bi-list"></i>
+                        <span class="d-none d-md-inline">List</span>
+                    </a>
+
+                    <!-- New dropdown -->
+                    <div class="dropdown nav-link ms-1">
+                        <a class="btn dropdown-toggle d-flex text-light" data-bs-toggle="dropdown" area-expanded="false"
+                           role="button">
+                            <i class="bi bi-file-earmark-plus"></i>
+                            <span class="d-none d-md-inline ms-1">New</span>
+                        </a>
+                        <ul class="dropdown-menu bg-dark text-light justify-content-start">
+                            <li>
+                                <a class="btn nav-link m-2" asp-area="" asp-controller="Notes"
+                                   asp-action="Create">Note</a>
+                            </li>
+                            <li>
+                                <a class="btn disabled nav-link m-2" asp-area="" asp-controller="Notes"
+                                   asp-action="Create">Image</a>
+                            </li>
+                        </ul>
+                    </div>
+                }
             </div>
-        </div>
-        <div class="container-fluid">
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav ms-auto">
-                    @if (User.Identity is not null && User.Identity.IsAuthenticated)
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Auth" asp-action="Profile">
-                                <i class="bi bi-person-circle"></i>
-                                <span class="d-none d-md-inline">@User.Identity.Name</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Logout">
-                                <i class="bi bi-box-arrow-right"></i>
-                                <span class="d-none d-md-inline">Logout</span>
-                            </a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="GoogleLogin">
-                                <i class="bi bi-door-open"></i>
-                                <span class="d-none d-md-inline">Login</span>
-                            </a>
-                        </li>
-                    }
-                </ul>
+
+
+            <!-- =========================================================
+                 MIDDLE SECTION
+                 ========================================================= -->
+            <div class="d-flex align-items-center mx-auto">
+                @* *@
+                @* <!-- Desktop search --> *@
+                @* <form class="d-none d-md-flex" *@
+                @*       method="get" *@
+                @*       action="/Search"> *@
+                @* *@
+                @*     <div class="input-group"> *@
+                @*         <input type="text" *@
+                @*                class="form-control" *@
+                @*                name="q" *@
+                @*                placeholder="Search..." *@
+                @*                aria-label="Search"> *@
+                @* *@
+                @*         <button class="btn btn-outline-secondary" *@
+                @*                 type="submit" *@
+                @*                 aria-label="Search"> *@
+                @*             <i class="bi bi-search"></i> *@
+                @*         </button> *@
+                @*     </div> *@
+                @* </form> *@
+                @* *@
+                @* *@
+                @* <!-- Mobile search --> *@
+                @* <div class="dropdown d-md-none"> *@
+                @*     <button class="btn btn-link" *@
+                @*             type="button" *@
+                @*             data-bs-toggle="dropdown" *@
+                @*             aria-expanded="false" *@
+                @*             aria-label="Search"> *@
+                @* *@
+                @*         <i class="bi bi-search fs-5"></i> *@
+                @*     </button> *@
+                @* *@
+                @*     <div class="dropdown-menu dropdown-menu-end p-3" *@
+                @*          style="min-width: 280px;"> *@
+                @* *@
+                @*         <form method="get" action="/Search"> *@
+                @*             <div class="input-group"> *@
+                @*                 <input type="text" *@
+                @*                        class="form-control" *@
+                @*                        name="q" *@
+                @*                        placeholder="Search..." *@
+                @*                        aria-label="Search"> *@
+                @* *@
+                @*                 <button class="btn btn-primary" *@
+                @*                         type="submit" *@
+                @*                         aria-label="Search"> *@
+                @*                     <i class="bi bi-search"></i> *@
+                @*                 </button> *@
+                @*             </div> *@
+                @*         </form> *@
+                @* *@
+                @*     </div> *@
+                @* </div> *@
+
             </div>
+
+
+            <!-- =========================================================
+                 RIGHT SECTION
+                 ========================================================= -->
+            <div class="d-flex align-items-center">
+
+                @if (User.Identity is not null && User.Identity.IsAuthenticated)
+                {
+                    <!-- Desktop -->
+                    <div class="d-none d-md-flex align-items-center gap-2">
+                        <a class="nav-link text-light bg-dark" asp-controller="Auth" asp-action="Profile">
+                            <i class="bi bi-person-circle"></i>
+                            <span class="d-none d-md-inline">@User.Identity.Name</span>
+                        </a>
+                        <a class="nav-link text-light bg-dark" asp-area="" asp-controller="Auth" asp-action="Logout">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span class="d-none d-md-inline">Logout</span>
+                        </a>
+                    </div>
+
+                    <!-- Mobile -->
+                    <div class="dropdown d-md-none">
+                        <a class="btn dropdown-toggle d-flex text-light" data-bs-toggle="dropdown" area-expanded="false"
+                           role="button">
+                            <i class="bi bi-person-circle"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end bg-dark text-light justify-content-start">
+                            <li>
+                                <a class="btn m-2 nav-link text-light bg-dark" asp-controller="Auth" asp-action="Profile">
+                                    <i class="bi bi-person-circle"></i>
+                                    <span>@User.Identity.Name</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn m-2 nav-link text-light bg-dark" asp-area="" asp-controller="Auth" asp-action="Logout">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                    <span>Logout</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <!-- Login -->
+                    <a class="nav-link text-light bg-dark" asp-area="" asp-controller="Auth" asp-action="GoogleLogin">
+                        <i class="bi bi-door-open"></i>
+                        <span class="d-none d-md-inline">Login</span>
+                    </a>
+                }
+            </div>
+
         </div>
     </nav>
 </header>
@@ -87,6 +186,9 @@
     </main>
 </div>
 
+<footer>
+    Darth Notes v.@AssemblyVersion
+</footer>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
